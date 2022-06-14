@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "CRUD Page";
+}
+@model lapGen.Views.ViewModels.GeneralDataViewModel
+<div class="text-center">
+    <h1 class="display-4">CRUD</h1>
+</div>
+
+<div>
+    <hr />
+    <div id="displays">
+        <h1>Displayed All Drivers</h1>
+        @foreach (var item in Model.drivers)
+        {
+            if(!item.active)
+            {
+                <h5>INACTIVE</h5>
+            }
+            <h5> @item.name </h5>
+        }
+        <br>
+        <h1>Displayed All Cars</h1>
+        @foreach (var item in Model.cars)
+        {
+            if(!item.active)
+            {
+                <h5>INACTIVE</h5>
+            }
+            <h5> @item.name </h5>
+        }
+        <br>
+        
+        <h1>Displayed All Laps</h1>
+        @foreach (var item in Model.displayLaps)
+        {
+            <h5> Car#:@item.carNum <br> Car Name: @item.carName <br> Driver: @item.recordedDriverName <br> Time: @item.lapTime </h5>
+            <br>
+        }
+        <br>
+    </div>
+    <div id="add">
+        @using(Html.BeginForm("CreateDriver", "Home",FormMethod.Post)){
+            <h1>Add Driver</h1>
+            <div class="form-group">
+            @Html.LabelFor(model => model.newDriver.name)
+            @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+        }
+        @using(Html.BeginForm("CreateCar", "Home",FormMethod.Post)){
+            <h1>Add Car</h1>
+            <div class="form-group">
+            @Html.LabelFor(model => model.newCar.name)
+            @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
+            @Html.LabelFor(model => model.newCar.number)
+            @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
+            @Html.LabelFor(model => model.newCar.currentDriver)
+            @Html.DropDownList("ddl_driver", Model.ToSelectList(Model.drivers,"Name"), new { @id="ddl_NC_CurrentDriver" ,@class="form-control"})  
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+        }
+        
+        @using(Html.BeginForm("CreateLap", "Home",FormMethod.Post)){
+            <h1>Add Lap</h1>
+            <div class="form-group">
+
+            @Html.Label("Select Car:")
+            @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
+
+            @Html.Label("Select Driver:")
+            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+            
+            @Html.Label("Lap Number: ")
+            @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
+
+            @Html.Label("Lap Time: (HH:MM:SS)")
+            @Html.TextBoxFor(model => model.newLap.recordedLapTime, new { @class="form-control"}) 
+
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+        } 
+        
+        
+    </div>
+    <div id="edit">
+        @using(Html.BeginForm("UpdateDriver", "Home",FormMethod.Post)){
+        <h1>Edit Driver</h1>
+        <div class="form-group">
+            @Html.Label("Select Driver:")
+            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+
+            @Html.Label("Name")
+            @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
+            @Html.Label("Rank")
+            @Html.TextBoxFor(model => model.newDriver.rank, new { @class="form-control"}) 
+        
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        <br>
+        }
+        @using(Html.BeginForm(Html.BeginForm("UpdateCar", "Home",FormMethod.Post))){
+            <h1>Edit Car</h1>
+            <div class="form-group">
+
+                @Html.Label("Select Car:")
+                @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
+
+                @Html.Label("Name")
+                @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
+                @Html.Label("Rank")
+                @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
+                @Html.Label("Select Driver:")
+                @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+        }
+        @using(Html.BeginForm("UpdateLap", "Home",FormMethod.Post)){
+            <h1>Edit Lap</h1>
+            <div class="form-group">
+            @Html.Label("Select LapID:")
+            @Html.DropDownList("ddl_laps", Model.ToSelectList(Model.laps,"ID"), new { @class="form-control"})  
+            
+            @Html.Label("Select Car:")
+            @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
+
+            @Html.Label("Select Driver:")
+            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+            @Html.Label("Lap Number: ")
+            @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
+
+            @Html.Label("Lap Time: (HH:MM:SS:NS)")
+            @Html.TextBoxFor(model => model.newLap.recordedLapTime, new { @class="form-control"}) 
+
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+        } 
+        
+    </div>
+    <div id="Delete">
+        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+            <h1>Delete Driver</h1>
+            <div class="form-group">
+                @Html.Hidden("Delete_Driver")
+                @Html.Label("Select Driver:")
+                @Html.DropDownList("ddl_driver", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"}) 
+            </div>
+            <button type="submit" class="btn btn-default">Delete</button>
+            <br>
+        }
+        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+            <h1>Delete Car</h1>
+            <div class="form-group">
+                @Html.Hidden("Delete_Car")
+                @Html.Label("Select Car:")
+                @Html.DropDownList("ddl_car", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"}) 
+            </div>
+            <button type="submit" class="btn btn-default">Delete</button>
+            <br>
+        }
+        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+            <h1>Delete Lap</h1>
+            <div class="form-group">
+                @Html.Hidden("Delete_Lap")
+                @Html.Label("Select Lap:")
+                @Html.DropDownList("ddl_lap", Model.ToSelectList(Model.laps,"ID"), new { @class="form-control"}) 
+            </div>
+            <button type="submit" class="btn btn-default">Delete</button>
+            <br>
+        }
+    </div>
+    
+
+
+    
+    
+</div>

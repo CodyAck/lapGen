@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Reporting Page";
+}
+@model lapGen.Views.ViewModels.ReportingViewModel
+<div class="text-center">
+    <h1 class="display-4">Reports</h1>
+</div>
+
+<h1>Average lap time by Driver</h1>
+
+
+
+    @foreach (Driver dr in Model.drivers)
+    {
+        if(!Model.CalculateAverageLapTime(dr.ID).Equals("00:00:00"))
+        {
+            <h5>@dr.name <br>Avarage Lap Time: @Model.CalculateAverageLapTime(dr.ID)</h5>
+        }
+        
+    }
+    <br>
+    <br>
+
+
+<h1>Average lap time by Car Number</h1>
+
+    @foreach (Car cr in Model.cars)
+    {
+        if(!Model.CalculateAverageLapTime(cr.ID,"car").Equals("00:00:00"))
+        {
+            <h5>Car#:@cr.number <br>Car Name: @cr.name<br>Avarage Lap Time: @Model.CalculateAverageLapTime(cr.ID,"car")</h5>
+        }
+        
+    }
+    <br>
+
+
+    
