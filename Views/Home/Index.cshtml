@@ -3,38 +3,32 @@
 }
 @model lapGen.Views.ViewModels.LapGenViewModel
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="page-title">Welcome</h1>
+</div>
+<hr>
+<div class="text-center">
+    
     @Html.Label("Select Car:")
-    @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
+    @Html.DropDownList("ddl_cars", Model.utilsRef.GenDropDownList(Model.cars,"Name"), new { @class="form-control"})  
 
     @Html.Label("Select Driver:")
-    @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+    @Html.DropDownList("ddl_drivers", Model.utilsRef.GenDropDownList(Model.drivers,"Name"), new { @class="form-control"})  
     
-    <button id="startBtn" role="button" class="btn btn-default">Start</button>
+    <button id="startBtn" role="button" onclick="StartLapGen()" class="btn btn-default">Start</button>
     <button id="stopBtn" role="button" class="btn btn-default">Stop</button>
 
 @section Scripts {
 <script>
-    $('#startBtn').on('click', function(e) {
-        $.ajax({
-            url: '/home/GenLaps'
-            data: { 'ddlCarVal' : '$("#ddl_cars").val(), ddlDriverVal' : '$("#ddl_drivers").val()' }
-            success: function (result) {
-                $('#target').html(result);
-            },
-            datatype: 'json'
+    function StartLapGen()
+    {
+        
+        $.postJSON('/GenLaps',function(data) {
+            alert();
         });
-    });
+    }
+    function StopLapGen()
+    {
 
-    $('#stopBtn').on('click', function(e) {
-        $.ajax({
-            url: '/home/StopLaps'
-            data: { '' }
-            success: function (result) {
-                $('#target').html(result);
-            },
-            datatype: 'json'
-        });
-    });
+    }
 </script>
 }

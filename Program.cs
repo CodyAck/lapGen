@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using lapGen.persistance;
 using lapGen.Utils.Interfaces;
 using lapGen.Utils.Implimentations;
+using lapGen.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ builder.Services.AddDbContext<DataCon>(options =>
 //add dbAssist
 builder.Services.AddScoped<DataCon,DataCon>();
 //add interface
-builder.Services.AddScoped<ITest,test>();
+builder.Services.AddScoped<IRecordsService,RecordsService>();
+builder.Services.AddScoped<ICarService,CarService>();
+builder.Services.AddScoped<IDriverService,DriverService>();
+builder.Services.AddScoped<ILapService,LapService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -35,7 +35,7 @@ namespace lapGen.persistance
                 {
                     foreach(Driver d in drivers )
                     {
-                        item.possibleDrivers.Add(d);
+                     //   item.drivers.Add(d);
                     }
                     
                 }
@@ -50,17 +50,17 @@ namespace lapGen.persistance
                         // }
                         // else
                         // {
-                            item.possibleDrivers.Add(drivers[0]);
+                         //   item.drivers.Add(drivers[0]);
                         //}
                         
                     }
                 }
-                item.SetAsStockCar();
+               // item.SetAsStockCar();
             }
 
             var laps = new Lap[]
             {
-                new Lap{recordedLapTime="00:03:34:14", recordedDriverID = 1, carID = 1, lapNumber = 1}
+               // new Lap{recordedLapTime="00:03:34:14", recordedDriverID = 1, carID = 1, lapNumber = 1}
             };
             
 

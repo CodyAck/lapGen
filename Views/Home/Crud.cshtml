@@ -3,179 +3,276 @@
 }
 @model lapGen.Views.ViewModels.GeneralDataViewModel
 <div class="text-center">
-    <h1 class="display-4">CRUD</h1>
+    <h1 class="page-title">CRUD</h1>
 </div>
 
 <div>
     <hr />
-    <div id="displays">
-        <h1>Displayed All Drivers</h1>
-        @foreach (var item in Model.drivers)
-        {
-            if(!item.active)
-            {
-                <h5>INACTIVE</h5>
-            }
-            <h5> @item.name </h5>
-        }
-        <br>
-        <h1>Displayed All Cars</h1>
-        @foreach (var item in Model.cars)
-        {
-            if(!item.active)
-            {
-                <h5>INACTIVE</h5>
-            }
-            <h5> @item.name </h5>
-        }
-        <br>
-        
-        <h1>Displayed All Laps</h1>
-        @foreach (var item in Model.displayLaps)
-        {
-            <h5> Car#:@item.carNum <br> Car Name: @item.carName <br> Driver: @item.recordedDriverName <br> Time: @item.lapTime </h5>
-            <br>
-        }
-        <br>
+    <div id="display_Car_Driver" class="container-row" style="width: 100%; ">
+        <div class="container-column" style="width: 50%;">
+            <div class="container-header">Displayed All Drivers</div>
+            <div style="background-color:dimgrey; border:solid; height:100%" >
+                <div class="container-column container-subContainer">
+                    @foreach (var item in Model.drivers)
+                    {
+                        if(item.active)
+                        {
+                            <div class="container-item-basic">@item.name </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="container-column" style="width: 50%;">
+            <div class="container-header">Displayed All Cars</div>
+            <div style="background-color:dimgrey; border:solid; height:100%" >
+                <div class="container-column container-subContainer">
+                    @foreach (var item in Model.cars)
+                    {
+                        if(item.active)
+                        {
+                            <div class="container-item-basic"> #@item.number: @item.name  </div>
+                        }
+                    }
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
+    <div class="container-column">
+        <div class="container-header">Displayed All Laps</div>
+        <div class="container-grid">
+            @foreach (var item in Model.laps)
+            {
+                @foreach (var subItem in item.records)
+                {
+                    <div class="grid-item">
+                        <h5>Lap#: @item.lapNumber
+                        <br>Car#:@subItem.car.number 
+                        <br>Car Name: @subItem.car.name 
+                        <br>Driver: @subItem.driver.name 
+                        <br>Time: @Model.utilsRef.ConvertSecondsToTimeString(subItem.timeInSeconds)
+                    </h5>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="text-center"></div>
+    <br>
     <div id="add">
-        @using(Html.BeginForm("CreateDriver", "Home",FormMethod.Post)){
-            <h1>Add Driver</h1>
-            <div class="form-group">
-            @Html.LabelFor(model => model.newDriver.name)
-            @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
+        <div class="container-column" style="width: 100%;">
+            <div class="container-row" style="width: 100%;">
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm("CreateDriver", "Home",FormMethod.Post)){
+                        <div class="container-header">Add Driver</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                        <div class="formItemTitle">Name:</div>
+                        @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                        </div>
+                    }
+                </div>
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm("CreateLap", "Home",FormMethod.Post)){
+                        <div class="container-header">Add Lap</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                        <div class="formItemTitle">Lap Number:</div>
+                        @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                        </div>
+                    }
+                </div>
+                
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <br>
-        }
-        @using(Html.BeginForm("CreateCar", "Home",FormMethod.Post)){
-            <h1>Add Car</h1>
-            <div class="form-group">
-            @Html.LabelFor(model => model.newCar.name)
-            @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
-            @Html.LabelFor(model => model.newCar.number)
-            @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
-            @Html.LabelFor(model => model.newCar.currentDriver)
-            @Html.DropDownList("ddl_driver", Model.ToSelectList(Model.drivers,"Name"), new { @id="ddl_NC_CurrentDriver" ,@class="form-control"})  
+            <div class="container-row" style="width: 100%;">
+                
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm("CreateCar", "Home",FormMethod.Post)){
+                        <div class="container-header">Add Car</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                        <div class="formItemTitle"> Name:</div>
+                        @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
+                        <div class="formItemTitle"> Number: </div>
+                        @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
+                        </div>
+                        <div style="">
+                            <button type="submit" class="button" style="margin-top: 140px;">Submit</button>
+                        </div>
+                        
+                        </div>
+
+                    }
+                </div>
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm("CreateRecord", "Home",FormMethod.Post)){
+                        <div class="container-header">Add Lap Record</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item" >
+                        <div class="formItemTitle">@Html.Label("Select Car:")</div>
+                        @Html.DropDownList("ddl_cars", Model.utilsRef.GenDropDownList(Model.cars,"Name"), new { @class="form-control"})  
+                        <div class="formItemTitle">@Html.Label("Select Driver:")</div>
+                        @Html.DropDownList("ddl_drivers", Model.utilsRef.GenDropDownList(Model.drivers,"Name"), new { @class="form-control"})  
+                        <div class="formItemTitle">@Html.Label("Lap Number: ")</div>
+                        @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
+                        <div class="formItemTitle">@Html.Label("Lap Time: (HH:MM:SS)")</div>
+                        @Html.TextBoxFor(model => model.timeIN, new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                        </div>
+                    } 
+                </div>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <br>
-        }
-        
-        @using(Html.BeginForm("CreateLap", "Home",FormMethod.Post)){
-            <h1>Add Lap</h1>
-            <div class="form-group">
 
-            @Html.Label("Select Car:")
-            @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
-
-            @Html.Label("Select Driver:")
-            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
-            
-            @Html.Label("Lap Number: ")
-            @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
-
-            @Html.Label("Lap Time: (HH:MM:SS)")
-            @Html.TextBoxFor(model => model.newLap.recordedLapTime, new { @class="form-control"}) 
-
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <br>
-        } 
-        
-        
+        </div>
     </div>
     <div id="edit">
-        @using(Html.BeginForm("UpdateDriver", "Home",FormMethod.Post)){
-        <h1>Edit Driver</h1>
-        <div class="form-group">
-            @Html.Label("Select Driver:")
-            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+        <div class="container-column">
+            <div class="container-row">
+                <div style="width: 33%;">
+                    @using(Html.BeginForm("UpdateDriver", "Home",FormMethod.Post)){
+                        <div class="container-header">Edit Driver</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                            <div class="formItemTitle">@Html.Label("Select Driver:")</div>
+                            @Html.DropDownList("ddl_drivers", Model.utilsRef.GenDropDownList(Model.drivers,"Name"), new { @class="form-control"})  
 
-            @Html.Label("Name")
-            @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
-            @Html.Label("Rank")
-            @Html.TextBoxFor(model => model.newDriver.rank, new { @class="form-control"}) 
-        
+                            <div class="formItemTitle">@Html.Label("Name")</div>
+                            @Html.TextBoxFor(model => model.newDriver.name, new { @class="form-control"}) 
+                            <div class="formItemTitle">@Html.Label("Rank")</div>
+                            @Html.TextBoxFor(model => model.newDriver.rank, new { @class="form-control"}) 
+                        
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                        </div>
+                    }
+                </div>
+                <div style="width: 33%;">
+                    @using(Html.BeginForm(Html.BeginForm("UpdateCar", "Home",FormMethod.Post))){
+                        <div class="container-header">Edit Car</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+
+                            <div class="formItemTitle">@Html.Label("Select Car:")</div>
+                            @Html.DropDownList("ddl_cars", Model.utilsRef.GenDropDownList(Model.cars,"Name"), new { @class="form-control"})  
+
+                            <div class="formItemTitle">@Html.Label("Name")</div>
+                            @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
+                            <div class="formItemTitle">@Html.Label("Rank")</div>
+                            @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                        </div>
+                    }
+                </div>
+                <div style="width: 33%;">
+                    @using(Html.BeginForm("UpdateLap", "Home",FormMethod.Post)){
+                        <div class="container-header">Edit Lap</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                        <div class="formItemTitle">@Html.Label("Select LapID:")</div>
+                        @Html.DropDownList("ddl_laps", Model.utilsRef.GenDropDownList(Model.laps,"ID"), new { @class="form-control"})  
+                
+                        <div class="formItemTitle">@Html.Label("Lap Number: ")</div>
+                        @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" style="margin-top: 72px;" class="button">Submit</button>
+                        </div>
+                    } 
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-        <br>
-        }
-        @using(Html.BeginForm(Html.BeginForm("UpdateCar", "Home",FormMethod.Post))){
-            <h1>Edit Car</h1>
-            <div class="form-group">
+        <div class="container-column">
+            <div>
+                @using(Html.BeginForm("UpdateRecord", "Home",FormMethod.Post)){
+                    <div class="container-header">Edit Lap Record</div>
+                    <div style="border: solid; background-color:dimgrey">
+                    <div class="form-group form-container-item">
+                    <div class="formItemTitle">@Html.Label("Select Record:")</div>
+                    @Html.DropDownList("ddl_records", Model.utilsRef.GenDropDownList(Model.records,"ID"), new { @class="form-control"})  
+                    
+                    <div class="formItemTitle">@Html.Label("Select Car:")</div>
+                    @Html.DropDownList("ddl_cars", Model.utilsRef.GenDropDownList(Model.cars,"Name"), new { @class="form-control"})  
 
-                @Html.Label("Select Car:")
-                @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
+                    <div class="formItemTitle">@Html.Label("Select Driver:")</div>
+                    @Html.DropDownList("ddl_drivers", Model.utilsRef.GenDropDownList(Model.drivers,"Name"), new { @class="form-control"})  
+                    <div class="formItemTitle">@Html.Label("Lap Number: ")</div>
+                    @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
 
-                @Html.Label("Name")
-                @Html.TextBoxFor(model => model.newCar.name, new { @class="form-control"}) 
-                @Html.Label("Rank")
-                @Html.TextBoxFor(model => model.newCar.number, new { @class="form-control"}) 
-                @Html.Label("Select Driver:")
-                @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
+                    <div class="formItemTitle">@Html.Label("Lap Time: (HH:MM:SS)")</div>
+                    @Html.TextBoxFor(model => model.timeIN, new { @class="form-control"}) 
+
+                    </div>
+                    <button type="submit" class="button">Submit</button>
+                    </div>
+                } 
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <br>
-        }
-        @using(Html.BeginForm("UpdateLap", "Home",FormMethod.Post)){
-            <h1>Edit Lap</h1>
-            <div class="form-group">
-            @Html.Label("Select LapID:")
-            @Html.DropDownList("ddl_laps", Model.ToSelectList(Model.laps,"ID"), new { @class="form-control"})  
-            
-            @Html.Label("Select Car:")
-            @Html.DropDownList("ddl_cars", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"})  
 
-            @Html.Label("Select Driver:")
-            @Html.DropDownList("ddl_drivers", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"})  
-            @Html.Label("Lap Number: ")
-            @Html.TextBoxFor(model => model.newLap.lapNumber, new { @class="form-control"}) 
-
-            @Html.Label("Lap Time: (HH:MM:SS:NS)")
-            @Html.TextBoxFor(model => model.newLap.recordedLapTime, new { @class="form-control"}) 
-
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            <br>
-        } 
-        
+        </div>
     </div>
     <div id="Delete">
-        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
-            <h1>Delete Driver</h1>
-            <div class="form-group">
-                @Html.Hidden("Delete_Driver")
-                @Html.Label("Select Driver:")
-                @Html.DropDownList("ddl_driver", Model.ToSelectList(Model.drivers,"Name"), new { @class="form-control"}) 
+        <div class="container-column" style="width: 100%;">
+            <div class="container-row" style="width: 100%;">
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+                        <div class="container-header">Delete Driver</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                            @Html.Hidden("Delete_Driver")
+                            <div class="formItemTitle">@Html.Label("Select Driver:")</div>
+                            @Html.DropDownList("ddl_driver", Model.utilsRef.GenDropDownList(Model.drivers,"Name"), new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Delete</button>
+                        </div>
+                    }
+                </div>
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+                        <div class="container-header">Delete Car</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                            @Html.Hidden("Delete_Car")
+                            <div class="formItemTitle">@Html.Label("Select Car:")</div>
+                            @Html.DropDownList("ddl_car", Model.utilsRef.GenDropDownList(Model.cars,"Name"), new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Delete</button>
+                        </div>
+                    }
+                </div>
             </div>
-            <button type="submit" class="btn btn-default">Delete</button>
-            <br>
-        }
-        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
-            <h1>Delete Car</h1>
-            <div class="form-group">
-                @Html.Hidden("Delete_Car")
-                @Html.Label("Select Car:")
-                @Html.DropDownList("ddl_car", Model.ToSelectList(Model.cars,"Name"), new { @class="form-control"}) 
+            <div class="container-row" style="width: 100%;">
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+                        <div class="container-header">Delete Lap</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                            @Html.Hidden("Delete_Lap")
+                            <div class="formItemTitle">@Html.Label("Select Lap:")</div>
+                            @Html.DropDownList("ddl_lap", Model.utilsRef.GenDropDownList(Model.laps,"ID"), new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Delete</button>
+                        </div>
+                    }
+                </div>
+                <div class="container-column" style="width: 50%;">
+                    @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
+                        <div class="container-header">Delete Lap Record</div>
+                        <div style="border: solid; background-color:dimgrey">
+                        <div class="form-group form-container-item">
+                            @Html.Hidden("Delete_Record")
+                            <div class="formItemTitle">@Html.Label("Select Lap:")</div>
+                            @Html.DropDownList("ddl_record", Model.utilsRef.GenDropDownList(Model.records,"ID"), new { @class="form-control"}) 
+                        </div>
+                        <button type="submit" class="button">Delete</button>
+                        </div>
+                    }
+                </div>
             </div>
-            <button type="submit" class="btn btn-default">Delete</button>
-            <br>
-        }
-        @using(Html.BeginForm(Html.BeginForm("DeleteData", "Home",FormMethod.Post))){
-            <h1>Delete Lap</h1>
-            <div class="form-group">
-                @Html.Hidden("Delete_Lap")
-                @Html.Label("Select Lap:")
-                @Html.DropDownList("ddl_lap", Model.ToSelectList(Model.laps,"ID"), new { @class="form-control"}) 
-            </div>
-            <button type="submit" class="btn btn-default">Delete</button>
-            <br>
-        }
+        </div>
     </div>
-    
-
-
-    
-    
 </div>

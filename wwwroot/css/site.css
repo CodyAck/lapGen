@@ -8,6 +8,88 @@ html {
   }
 }
 
+.red{
+  background-color: red;
+}
+.page-title{
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+}
+.container-row{
+  display: flex;
+  flex-direction: row;
+}
+.container-grid{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: dimgray;
+  padding: 10px;
+  border: solid;
+}
+.container-header{
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+.container-item-basic{
+  font-size: 20px;
+  text-align: center;
+}
+.form-container-item{
+  padding-left:10px; 
+  padding-right:10px;
+  
+}
+.container-subContainer{
+  background-color: rgba(238, 238, 238, 0.8);; 
+  color: black;
+  padding:5px;
+  margin: 5px;
+  font-size: 30px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+}
+.grid-item {
+  background-color: rgba(238, 238, 238, 0.8);
+  margin: .3rem;
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+.formItemTitle{
+  background-color: rgba(238, 238, 238, 0.8);
+  width:fit-content;
+  border-radius: 10px;
+  padding-left: 3px;
+  padding-right:3px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  text-align: center;
+  font-weight: bold;
+}
+.borderd-solid{
+  border: solid;
+}
+.container-column{
+  display: flex;
+  flex-direction: column;
+}
+.button {
+  background-color: #cc0700;
+  border: solid;
+  border: black;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5em;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -15,4 +97,29 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.css-selector {
+  background: linear-gradient(270deg, #ffef00, #ff0000, #0076ff);
+  background-size: 600% 600%;
+
+  -webkit-animation: AnimationName 29s ease infinite;
+  -moz-animation: AnimationName 29s ease infinite;
+  animation: AnimationName 29s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }

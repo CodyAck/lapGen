@@ -17,16 +17,13 @@ namespace lapGen.persistance
         }
         public DbSet<Driver> Drivers{get; set;}
         public DbSet<Car> Cars{get; set;}
-        
+        public DbSet<Record> Records{get; set;}
         public DbSet<Lap> Laps{get; set;}
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Driver>().ToTable("Driver");
-            modelBuilder.Entity<Car>().ToTable("Car");
-            modelBuilder.Entity<Lap>().ToTable("Lap");
-
+            // var lapEntity = modelBuilder.Entity<Lap>();
+            // lapEntity.HasIndex(x =>x.lapNumber).IsUnique(true);
         }
     }
 
